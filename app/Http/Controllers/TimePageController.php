@@ -10,6 +10,7 @@ class TimePageController extends Controller
 
 		// SI ON RECUPERE DES DONNEES DEPUIS LE FORMULAIRE ON PREPARE LES DONNEES INITIALES
 		$inputs = $request->all();
+        var_dump($request['algo']);
 		if ($inputs) {
 			$datasBeforeTri = array();
 			$datasBeforeTri = static::dataPrepare($inputs);
@@ -17,13 +18,32 @@ class TimePageController extends Controller
 
 	   	// -> EXEC DES TRIS <-//
             $results = array();
-            $results[] = static::execTri('Tri à bulle', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri par insertion', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri par selection', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri par fusion', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri rapide', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri à peigne', $datasBeforeTri, $inputs['nbexec']);
-            $results[] = static::execTri('Tri de shell', $datasBeforeTri, $inputs['nbexec']);
+            // if (in_array('0', $request['algo'])) {
+            //     $results[] = static::execTri('Tri à bulle', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            // if (in_array('1', $request['algo'])) {
+            //     $results[] = static::execTri('Tri par insertion', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            // if (in_array('2', $request['algo'])) {
+            //     $results[] = static::execTri('Tri par selection', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            // if (in_array('3', $request['algo'])) {
+            //     $results[] = static::execTri('Tri par fusion', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            // if (in_array('4', $request['algo'])) {
+            //     $results[] = static::execTri('Tri rapide', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            // if (in_array('5', $request['algo'])) {
+            //     $results[] = static::execTri('Tri à peigne', $datasBeforeTri, $inputs['nbexec']);
+            // }
+            foreach ($request['algo'] as $key => $value) {
+                $results[] = static::execTri($value, $datasBeforeTri, $inputs['nbexec']);
+            }
+
+
+
+
+            //$results[] = static::execTri('Tri de shell', $datasBeforeTri, $inputs['nbexec']);
 
 	   	//RETURN
 	   	return view('pages.time', compact('datasBeforeTri', 'results'));

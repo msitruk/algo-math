@@ -1,85 +1,178 @@
 @extends('layout')
 
 @section('content')
-    <div class="container">
-        <h1>Moyenne du temps de calcul par tri</h1>
+    <style>
+        .col-timepage {
+            margin-left: 13%;
+            margin-top: 1%;
+            margin-bottom: 1%;
 
-        <form method="GET">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="nb">Nombre d'élements dans le tableau : </label>
-                    </div>
-                    <div class="col-md-6">
-                        <select name="nb">
-                            <option value="10">10</option>
-                            <option value="100">100</option>
-                            <option value="1000">1000</option>
-                            <option value="10000">10000</option>
-                        </select>
-                    </div>
+        }
+        .panelheading-timepage,
+        .panelheading-algo,
+        .panelheading-graphics,
+        .panelheading-before,
+        .panelheading-after {
+            padding-top: 3px;
+        }
+        .col-algo, .col-graphics,
+        .col-databefore, .col-dataafter {
+            margin-left: 5%;
+        }
+        .result-algo {
+            padding-left: 15px;
+        }
+        .btn-before {
+            float: right;
+            position: relative;
+            top: -33px;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-9 col-timepage">
+            <div class="panel panel-default panel-timepage">
+                <div class="panel-heading panelheading-timepage">
+                    <h4><i class="fa fa-percent" aria-hidden="true"></i> Moyenne du temps de calcul par tri</h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="sortway">Agencement initial des données de la série : </label>
-                    </div>
-                    <div class="col-md-6">
-                        <select name="sortway">
-                            <option value="sorted">Déjà triée</option>
-                            <option value="inverse">Triée en sens inverse</option>
-                            <option value="random">Total random</option>
-                            <option value="almost">Quasiment-triée</option>
-                            <option value="duplicates">Bcp de doublons et qq uniques</option>
-                            {{-- une moyenne des séries citées ci-dessus --}}
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="nbexec">Nombre d'executions : </label>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="number" name="nbexec" value="1" min="1">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="submit" name="Go">
-                    </div>
+                <div class="panel-body">
+                    <form method="GET">
+                        <div class="container">
+                            <div class="row">
+                                <div clas="col-md-6">
+                                    <label for="algo">Algorithmes à trier : </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri à bulle">Tri à bulle</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par insertion">Tri par insertion</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par selection">Tri par selection</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par fusion">Tri par fusion</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri rapide">Tri rapide</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri à peigne">Tri à peigne</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="nb">Nombre d'élements dans le tableau : </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="nb">
+                                        <option value="10">10</option>
+                                        <option value="100">100</option>
+                                        <option value="1000">1000</option>
+                                        <option value="10000">10000</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="sortway">Agencement initial des données de la série : </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="sortway">
+                                        <option value="sorted">Déjà triée</option>
+                                        <option value="inverse">Triée en sens inverse</option>
+                                        <option value="random">Total random</option>
+                                        <option value="almost">Quasiment-triée</option>
+                                        <option value="duplicates">Bcp de doublons et qq uniques</option>
+                                        {{-- une moyenne des séries citées ci-dessus --}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="nbexec">Nombre d'executions : </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" name="nbexec" value="1" min="1">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="submit" name="Go">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
-
-        @if (isset($datasBeforeTri))
-            @foreach ($results as $result)
-                <h2>{{ $result["name"] }}</h2>
-                {{-- <p>{{ $result["data"] }}</p> --}}
-{{--                 <p>
-                    @foreach ($result["data"] as $data)
-                        {{ $data }} 
-                    @endforeach
-                </p> --}}
-                <p>
-                Temps moyen d'exécution : 
-                    @if (strstr($result["Average time"], 'E'))
-                        {{ sprintf('%.15F',$result["Average time"]) }} / 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-algo">
+            <div class="panel panel-default">
+                <div class="panel-heading panelheading-algo">
+                    <h4><i class="fa fa-balance-scale" aria-hidden="true"></i> Algorithmes</h4>
+                    <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-algo" 
+                    aria-expanded="false" aria-controls="collapse-algo"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                </div>
+                <div class="panel-body collapse in" id="collapse-algo">
+                    @if (isset($datasBeforeTri))
+                        @foreach ($results as $result)
+                            <h5><span class="label-algo">{{ $result["name"] }}</span></h5>
+                            <p class="result-algo">
+                                Temps moyen d'exécution :<br /> 
+                                @if (strstr($result["Average time"], 'E'))
+                                    {{ sprintf('%.15F',$result["Average time"]) }} / 
+                                @endif
+                                <span class="value-algo"> {{ $result["Average time"] }} </span> 
+                            </p>
+                        @endforeach
                     @endif
-                    {{ $result["Average time"] }}
-                </p>
-            @endforeach
-            <h2>Datas avant le tri :</h2>
-            <p>
-                @foreach ($datasBeforeTri as $data)
-                    {{ $data }} 
-                @endforeach
-            </p>
-            <h2>Datas après le tri :</h2>
-            {{-- <p>{{ print_r($results, true) }}</p> --}}
-            <p>
-                @foreach ($result["data"] as $data)
-                    {{ $data }} 
-                @endforeach
-            </p>
-        @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 col-graphics">
+            <div class="panel panel-default">
+                <div class="panel-heading panelheading-graphics">
+                    <h4><i class="fa fa-bar-chart" aria-hidden="true"></i> Graphiques</h4>
+                    <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-graphics" 
+                    aria-expanded="false" aria-controls="collapse-graphics"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                </div>
+                <div class="panel-body collapse in" id="collapse-graphics">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-databefore">
+            <div class="panel panel-default">
+                <div class="panel-heading panelheading-before">
+                    <h4><i class="fa fa-database" aria-hidden="true"></i> Data avant le tri</h4>
+                    <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-before" 
+                    aria-expanded="false" aria-controls="collapse-before"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                </div>
+                <div class="panel-body collapse" id="collapse-before">
+                    @if (isset($datasBeforeTri))
+                        <h5>Datas avant le tri :</h5>
+                        <p>
+                            @foreach ($datasBeforeTri as $data)
+                                {{ $data }} 
+                            @endforeach
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 col-dataafter">
+            <div class="panel panel-default">
+                <div class="panel-heading panelheading-after">
+                    <h4><i class="fa fa-database" aria-hidden="true"></i> Data après le tri</h4>
+                    <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-after" 
+                    aria-expanded="false" aria-controls="collapse-after"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                </div>
+                <div class="panel-body collapse" id="collapse-after">
+                    @if (isset($datasBeforeTri))
+                        <h5>Datas après le tri :</h5>
+                        {{-- <p>{{ print_r($results, true) }}</p> --}}
+                        <p>
+                            @foreach ($result["data"] as $data)
+                                {{ $data }} 
+                            @endforeach
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
 @stop
