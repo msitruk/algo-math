@@ -10,7 +10,6 @@ class TimePageController extends Controller
 
 		// SI ON RECUPERE DES DONNEES DEPUIS LE FORMULAIRE ON PREPARE LES DONNEES INITIALES
 		$inputs = $request->all();
-        var_dump($request['algo']);
 		if ($inputs) {
 			$datasBeforeTri = array();
 			$datasBeforeTri = static::dataPrepare($inputs);
@@ -246,33 +245,24 @@ class TimePageController extends Controller
         return $tableau;
     }
 
-    public function triShell($tableau)
+    public function triShell($my_array)
     {
-        $gap = floor(count($tableau)/2);
-        while ($gap > 0) {
-            for ($i = 0; $i < count($tableau)-$gap; ++$i) {
-                $arrWithGapsKeys = array();
-                $arrWithGaps = array();
-                $loop = true;
+        $x = round(count($my_array)/2);
+        while($x > 0)
+        {
+            for($i = $x; $i < count($my_array);$i++){
+                $temp = $my_array[$i];
                 $j = $i;
-                while ($loop) {
-                    if (isset($tableau[$j])) {
-                        $arrWithGapsKeys[] = (int)$j;
-                        $arrWithGaps[] = $tableau[$j];
-                        $j += $gap;
-                    } else {
-                        $loop = false;
-                    }
+                while($j >= $x && $my_array[$j-$x] > $temp)
+                {
+                    $my_array[$j] = $my_array[$j - $x];
+                    $j -= $x;
                 }
-                $arrWithGapsOrdered = static::triInsertion($arrWithGaps);
-                foreach ($arrWithGapsKeys as $key) {
-                    $arr[$key] = current($arrWithGapsOrdered);
-                    next($arrWithGapsOrdered);
-                }
+                $my_array[$j] = $temp;
             }
-            $gap = floor($gap/2);
+            $x = round($x/2.2);
         }
-        return $tableau;
+        return $my_array;
     }
 
 	public function execTri($nomDuTri, $datasInitial, $nbexec){

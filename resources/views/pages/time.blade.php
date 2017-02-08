@@ -3,10 +3,22 @@
 @section('content')
     <style>
         .col-timepage {
-            margin-left: 13%;
+            margin-left: 11.5%;
             margin-top: 1%;
             margin-bottom: 1%;
 
+        }
+        .panel-footer {
+            background-color: #fafafa;
+        }
+        .box-algo {
+            margin-bottom: 8px;
+        }
+        .checkbox-algo {
+            padding-left: 20px;
+        }
+        a#allAlgo {
+            margin-left: 10px;
         }
         .panelheading-timepage,
         .panelheading-algo,
@@ -27,6 +39,10 @@
             position: relative;
             top: -33px;
         }
+        div.scroll {
+            height: 100px;
+            overflow: scroll;
+        }
     </style>
     <div class="row">
         <div class="col-md-9 col-timepage">
@@ -34,27 +50,27 @@
                 <div class="panel-heading panelheading-timepage">
                     <h4><i class="fa fa-percent" aria-hidden="true"></i> Moyenne du temps de calcul par tri</h4>
                 </div>
-                <div class="panel-body">
-                    <form method="GET">
+                <form method="GET">
+                    <div class="panel-body">
                         <div class="container">
-                            <div class="row">
-                                <div clas="col-md-6">
-                                    <label for="algo">Algorithmes à trier : </label>
-                                </div>
-                                <div class="col-md-6">
+                            <div class="box-algo">
+                                <label for="algo">Algorithmes à trier : </label><br />
+                                <div class="checkbox-algo">
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri à bulle">Tri à bulle</label>
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par insertion">Tri par insertion</label>
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par selection">Tri par selection</label>
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri par fusion">Tri par fusion</label>
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri rapide">Tri rapide</label>
                                     <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri à peigne">Tri à peigne</label>
+                                    <label class="checkbox-inline"><input name="algo[]" type="checkbox" value="Tri de shell">Tri de shell</label>
+                                    <a class="btn btn-default btn-sm" id="allAlgo">Tout trier</a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="nb">Nombre d'élements dans le tableau : </label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <select name="nb">
                                         <option value="10">10</option>
                                         <option value="100">100</option>
@@ -64,10 +80,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="sortway">Agencement initial des données de la série : </label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <select name="sortway">
                                         <option value="sorted">Déjà triée</option>
                                         <option value="inverse">Triée en sens inverse</option>
@@ -79,21 +95,24 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="nbexec">Nombre d'executions : </label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <input type="number" name="nbexec" value="1" min="1">
                                 </div>
                             </div>
-                            <div class="row">
+                           <!--  <div class="row">
                                 <div class="col-md-12">
-                                    <input type="submit" name="Go">
+                                    <input class="btn btn-default btnValidate" type="submit" name="Go">
                                 </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                            </div> -->
+                        </div>   
+                    </div>
+                    <div class="panel-footer">
+                        <input class="btn btn-default btn-block btnValidate" type="submit" name="Go">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -142,10 +161,9 @@
                     <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-before" 
                     aria-expanded="false" aria-controls="collapse-before"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
                 </div>
-                <div class="panel-body collapse" id="collapse-before">
+                <div class="panel-body collapse scroll" id="collapse-before">
                     @if (isset($datasBeforeTri))
-                        <h5>Datas avant le tri :</h5>
-                        <p>
+                        <p class="dataBefore">
                             @foreach ($datasBeforeTri as $data)
                                 {{ $data }} 
                             @endforeach
@@ -161,11 +179,9 @@
                     <a class="btn btn-default btn-before" data-toggle="collapse" href="#collapse-after" 
                     aria-expanded="false" aria-controls="collapse-after"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
                 </div>
-                <div class="panel-body collapse" id="collapse-after">
+                <div class="panel-body collapse scroll" id="collapse-after">
                     @if (isset($datasBeforeTri))
-                        <h5>Datas après le tri :</h5>
-                        {{-- <p>{{ print_r($results, true) }}</p> --}}
-                        <p>
+                        <p class="dataAfter">
                             @foreach ($result["data"] as $data)
                                 {{ $data }} 
                             @endforeach
